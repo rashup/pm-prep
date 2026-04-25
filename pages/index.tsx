@@ -9,7 +9,7 @@ type Report = {
   date: string
 }
 
-export default function Home({ reports }: { reports: Report[] }) {
+export default function Home({ reports, featured }: { reports: Report[], featured: Report | null }) {
   return (
     <main style={{
       maxWidth: 720,
@@ -20,41 +20,80 @@ export default function Home({ reports }: { reports: Report[] }) {
     }}>
       <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 6 }}>PM Interview Prep</h1>
       <p style={{ color: "#888", marginBottom: 40, fontSize: 15 }}>
-        Company research reports
+        Structured company research reports for product manager interviews —
+        live web-sourced, inline citations, built with the Anthropic API.
       </p>
 
-      {reports.length === 0 ? (
-        <p style={{ color: "#aaa" }}>
-          No reports yet. Run <code style={{ background: "#f4f4f4", padding: "2px 6px", borderRadius: 4 }}>
-            python generate.py "Company"
-          </code>
-        </p>
-      ) : (
-        <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-          {reports.map((r) => (
-            <li key={r.slug} style={{
-              padding: "16px 0",
-              borderBottom: "1px solid #eee",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center"
-            }}>
-              <Link href={`/${r.slug}`} style={{
-                fontSize: 17,
-                fontWeight: 600,
-                color: "#0070f3",
-                textDecoration: "none"
-              }}>
-                {r.company}
-              </Link>
-              <span style={{ color: "#aaa", fontSize: 13 }}>{r.date}</span>
-            </li>
-          ))}
-        </ul>
+      {/* Featured sample report */}
+      {featured && (
+        <div style={{
+          background: "#f0f7ff",
+          border: "1px solid #cce0ff",
+          borderRadius: 8,
+          padding: "20px 24px",
+          marginBottom: 40
+        }}>
+          <p style={{ fontSize: 12, fontWeight: 600, color: "#0070f3", marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>
+            Sample Report
+          </p>
+          <Link href={`/${featured.slug}`} style={{
+            fontSize: 20,
+            fontWeight: 700,
+            color: "#0070f3",
+            textDecoration: "none",
+            display: "block",
+            marginBottom: 6
+          }}>
+            {featured.company} →
+          </Link>
+          <p style={{ fontSize: 13, color: "#666", margin: 0 }}>
+            See a full report: business model, financials, products, competitors,
+            product sense insights, interview talking points, and recent news.
+          </p>
+        </div>
       )}
+
+      {/* All reports */}
+      {reports.length === 0 ? (
+        <p style={{ color: "#aaa" }}>No reports yet.</p>
+      ) : (
+        <>
+          <p style={{ fontSize: 13, fontWeight: 600, color: "#aaa", marginBottom: 12, textTransform: "uppercase", letterSpacing: 1 }}>
+            All Reports
+          </p>
+          <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+            {reports.map((r) => (
+              <li key={r.slug} style={{
+                padding: "14px 0",
+                borderBottom: "1px solid #eee",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center"
+              }}>
+                <Link href={`/${r.slug}`} style={{
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: "#0070f3",
+                  textDecoration: "none"
+                }}>
+                  {r.company}
+                </Link>
+                <span style={{ color: "#aaa", fontSize: 13 }}>{r.date}</span>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      <p style={{ marginTop: 60, fontSize: 12, color: "#ccc" }}>
+        Built with Claude claude-opus-4-7 + live web search ·{" "}
+        <a href="https://github.com/rashup/pm-prep" style={{ color: "#ccc" }}>GitHub</a>
+      </p>
     </main>
   )
 }
+
+const FEATURED_SLUG = "intel"
 
 export const getStaticProps: GetStaticProps = async () => {
   const reportsDir = path.join(process.cwd(), "reports")
@@ -71,5 +110,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   reports.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
-  return { props: { reports } }
+  const featured = reports.find((r) => r.slug === FEATURED_SLUG) ?? reports[0] ?? null
+
+  return { props: { reports, featured } }
 }

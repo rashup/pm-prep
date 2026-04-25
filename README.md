@@ -41,7 +41,7 @@ python generate.py "Figma" "FigJam"
 
 ## Viewing Reports
 
-Reports are published at [yoursite.vercel.app](https://yoursite.vercel.app).
+Reports are published at [pmprep-pink.vercel.app](https://pmprep-pink.vercel.app).
 
 To add a new report to the site:
 
