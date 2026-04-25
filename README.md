@@ -39,9 +39,13 @@ python generate.py "Figma" "FigJam"
 # Reports are saved to reports/<company-name>.md
 ```
 
-## Viewing Reports
+## Live Site
 
 Reports are published at [pmprep-pink.vercel.app](https://pmprep-pink.vercel.app).
+
+**Sample report (live site):** [Netflix — Company Research](https://pmprep-pink.vercel.app/netflix)
+
+**Sample report (GitHub):** [reports/netflix.md](./reports/netflix.md)
 
 To add a new report to the site:
 
