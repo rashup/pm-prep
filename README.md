@@ -1,4 +1,4 @@
-# PM Interview Prep
+# Company Research Tool for PM Interviews
 
 A research tool that generates structured company reports for product manager interviews.
 

@@ -1,7 +1,20 @@
 import anthropic
 import sys
+import os
+
+# Fix Windows terminal Unicode encoding
+if sys.platform == "win32":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 from pathlib import Path
 from datetime import datetime
+
+# Load .env.local if it exists
+env_file = Path(__file__).parent / ".env.local"
+if env_file.exists():
+    for line in env_file.read_text().splitlines():
+        if "=" in line and not line.startswith("#"):
+            key, _, value = line.partition("=")
+            os.environ.setdefault(key.strip(), value.strip())
 
 SYSTEM_PROMPT = """
 You are a PM interview preparation agent. When given a company name and optional product,
@@ -31,11 +44,9 @@ SOURCING RULES:
 - Cite sources INLINE immediately after each factual claim using markdown links
   Example: "Revenue grew 22% YoY ([Intel Q1 2026 Earnings](https://...)) driven by data center demand."
 - Every financial figure, market share stat, and product claim must have an inline citation
-- Run at minimum 4 targeted web searches:
-  (1) financials and 10-K filings
-  (2) strategy, products, and roadmap
-  (3) competitors and market share
-  (4) recent news with explicit 30-day date filter
+- Run exactly 2 targeted web searches:
+  (1) financials, strategy, and products combined
+  (2) recent news with explicit 30-day date filter
 - If you cannot find a source for a claim, mark it [unverified] — never fabricate
 - Never invent financial figures. Write "data unavailable" rather than guess.
 - For Recent News: only include items with a confirmed published date from web search
@@ -73,8 +84,8 @@ def generate_report(company: str, product: str = None):
     report = header
 
     with client.messages.stream(
-        model="claude-opus-4-7",
-        max_tokens=4096,
+        model="claude-sonnet-4-6",
+        max_tokens=2048,
         tools=[
             {"type": "web_search_20260209", "name": "web_search"},
             {"type": "web_fetch_20260209", "name": "web_fetch"},

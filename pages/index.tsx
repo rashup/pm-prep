@@ -18,7 +18,7 @@ export default function Home({ reports, featured }: { reports: Report[], feature
       padding: "0 24px",
       color: "#1a1a1a"
     }}>
-      <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 6 }}>PM Interview Prep</h1>
+      <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 6 }}>Company Research Tool for PM Interviews</h1>
       <p style={{ color: "#888", marginBottom: 40, fontSize: 15 }}>
         Structured company research reports for product manager interviews —
         live web-sourced, inline citations, built with the Anthropic API.
