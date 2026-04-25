@@ -50,6 +50,11 @@ export default function Home({ reports, featured }: { reports: Report[], feature
             See a full report: business model, financials, products, competitors,
             product sense insights, interview talking points, and recent news.
           </p>
+          <p style={{ fontSize: 13, marginTop: 10, margin: 0 }}>
+            <Link href="/netflix" style={{ color: "#0070f3" }}>
+              View Netflix sample report →
+            </Link>
+          </p>
         </div>
       )}
 
