@@ -1,6 +1,7 @@
 import fs from "fs"
 import path from "path"
 import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 import Link from "next/link"
 import { GetStaticProps, GetStaticPaths } from "next"
 
@@ -18,6 +19,7 @@ export default function ReportPage({ content }: { content: string }) {
       </Link>
       <article style={{ marginTop: 28, lineHeight: 1.75 }}>
         <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
           components={{
             h1: ({ children }) => (
               <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 4 }}>{children}</h1>
@@ -42,26 +44,33 @@ export default function ReportPage({ content }: { content: string }) {
               <li style={{ marginBottom: 6, fontSize: 15 }}>{children}</li>
             ),
             table: ({ children }) => (
-              <table style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                margin: "20px 0",
-                fontSize: 14
-              }}>{children}</table>
+              <div style={{ overflowX: "auto", margin: "20px 0" }}>
+                <table style={{
+                  width: "100%",
+                  borderCollapse: "collapse",
+                  fontSize: 14,
+                  border: "1px solid #e0e0e0",
+                  borderRadius: 6,
+                }}>{children}</table>
+              </div>
             ),
             th: ({ children }) => (
               <th style={{
                 background: "#f7f7f7",
-                padding: "8px 12px",
+                padding: "10px 14px",
                 textAlign: "left",
                 borderBottom: "2px solid #ddd",
-                fontWeight: 600
+                borderRight: "1px solid #e0e0e0",
+                fontWeight: 600,
+                whiteSpace: "nowrap"
               }}>{children}</th>
             ),
             td: ({ children }) => (
               <td style={{
-                padding: "8px 12px",
-                borderBottom: "1px solid #eee"
+                padding: "9px 14px",
+                borderBottom: "1px solid #eee",
+                borderRight: "1px solid #eee",
+                verticalAlign: "top"
               }}>{children}</td>
             ),
             code: ({ children }) => (
